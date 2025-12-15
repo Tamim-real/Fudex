@@ -1,14 +1,12 @@
 import { Link, useLocation, useNavigate } from "react-router";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
-import { useForm } from "react-hook-form";
-import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 
-import { imageUpload } from "../utils";
-
-const Register = () => {
-  const { loading, createUser, updateUserProfile } = useContext(AuthContext);
+const Login = () => {
+  const { signIn, loading } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,48 +19,16 @@ const Register = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const { name, image, email, password } = data;
-
-    const imgaeFile = image[0];
-
-
+    const { email, password } = data;
 
     try {
-
-
-      const imageUrl = await imageUpload(imgaeFile)
-
-
-      const result = await createUser(email, password);
-
-      await updateUserProfile(name, imageUrl)
-
-      const userInfo = {
-        name,
-        email,
-        image: imageUrl,
-        role: "user",
-        status: "active",
-        createdAt: new Date(),
-      };
-
-      await fetch('http://localhost:3000/users',{
-        method: 'POST',
-        headers:{
-          "content-type" : "application/json"
-        },
-        body: JSON.stringify(userInfo)
-      })
-
-      toast.success("Welcome to Fudex 🍔");
+      await signIn(email, password);
+      toast.success("Welcome back to Fudex 🍔");
       navigate(from, { replace: true });
-      console.log(result);
     } catch (err) {
-      console.log(err);
-      toast.error(err?.message);
+      toast.error(err.message);
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-red-100 px-4">
@@ -73,56 +39,12 @@ const Register = () => {
             Fudex
           </h1>
           <p className="text-gray-500 mt-2">
-            Create your food journey 🍕
+            Login to continue your food journey 🍟
           </p>
         </div>
 
         {/* Form */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-5"
-        >
-          {/* Name */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              type="text"
-              placeholder="John Doe"
-              className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none"
-              {...register("name", {
-                required: "Name is required",
-                maxLength: {
-                  value: 20,
-                  message: "Name cannot exceed 20 characters",
-                },
-              })}
-            />
-            {errors.name && (
-              <p className="text-xs text-red-500 mt-1">
-                {errors.name.message}
-              </p>
-            )}
-          </div>
-
-          {/* Image */}
-          <div>
-            <label className="text-sm font-medium text-gray-700">
-              Profile Image
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              className="mt-1 block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-lg file:border-0
-              file:bg-orange-50 file:text-orange-600
-              hover:file:bg-orange-100"
-              {...register("image")}
-            />
-          </div>
-
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
           <div>
             <label className="text-sm font-medium text-gray-700">
@@ -134,11 +56,6 @@ const Register = () => {
               className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none"
               {...register("email", {
                 required: "Email is required",
-                pattern: {
-                  value:
-                    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                  message: "Invalid email address",
-                },
               })}
             />
             {errors.email && (
@@ -159,10 +76,6 @@ const Register = () => {
               className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none"
               {...register("password", {
                 required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Minimum 6 characters required",
-                },
               })}
             />
             {errors.password && (
@@ -180,19 +93,19 @@ const Register = () => {
             {loading ? (
               <TbFidgetSpinner className="animate-spin mx-auto" />
             ) : (
-              "Create Account"
+              "Login"
             )}
           </button>
         </form>
 
         {/* Footer */}
         <p className="text-center text-sm text-gray-500 mt-6">
-          Already have an account?{" "}
+          Don’t have an account?{" "}
           <Link
-            to="/login"
+            to="/register"
             className="text-orange-500 font-medium hover:underline"
           >
-            Login
+            Create Account
           </Link>
         </p>
       </div>
@@ -200,4 +113,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
