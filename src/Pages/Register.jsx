@@ -20,48 +20,38 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    const { name, image, email, password } = data;
+ const onSubmit = async (data) => {
+  const { name, image, email, password, address } = data; 
 
-    const imgaeFile = image[0];
+  const imgaeFile = image[0];
 
+  try {
+    const imageUrl = await imageUpload(imgaeFile);
+    const result = await createUser(email, password);
+    await updateUserProfile(name, imageUrl);
 
+    const userInfo = {
+      name,
+      email,
+      address, 
+      image: imageUrl,
+      role: "user",
+      status: "active",
+      createdAt: new Date(),
+    };
 
-    try {
+    await fetch('http://localhost:3000/users', {
+      method: 'POST',
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(userInfo)
+    });
 
-
-      const imageUrl = await imageUpload(imgaeFile)
-
-
-      const result = await createUser(email, password);
-
-      await updateUserProfile(name, imageUrl)
-
-      const userInfo = {
-        name,
-        email,
-        image: imageUrl,
-        role: "user",
-        status: "active",
-        createdAt: new Date(),
-      };
-
-      await fetch('http://localhost:3000/users',{
-        method: 'POST',
-        headers:{
-          "content-type" : "application/json"
-        },
-        body: JSON.stringify(userInfo)
-      })
-
-      toast.success("Welcome to Fudex 🍔");
-      navigate(from, { replace: true });
-      console.log(result);
-    } catch (err) {
-      console.log(err);
-      toast.error(err?.message);
-    }
-  };
+    toast.success("Welcome to Fudex 🍔");
+    navigate(from, { replace: true });
+  } catch (err) {
+    toast.error(err?.message);
+  }
+};
 
 
   return (
@@ -144,6 +134,26 @@ const Register = () => {
             {errors.email && (
               <p className="text-xs text-red-500 mt-1">
                 {errors.email.message}
+              </p>
+            )}
+          </div>
+
+          {/* Address */}
+          <div>
+            <label className="text-sm font-medium text-gray-700">
+              Address
+            </label>
+            <input
+              type="text"
+              placeholder="Dhaka, Bangladesh"
+              className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-orange-400 focus:outline-none"
+              {...register("address", {
+                required: "Address is required",
+              })}
+            />
+            {errors.address && (
+              <p className="text-xs text-red-500 mt-1">
+                {errors.address.message}
               </p>
             )}
           </div>
