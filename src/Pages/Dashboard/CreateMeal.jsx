@@ -22,7 +22,7 @@ const CreateMeal = () => {
     const matchedUser = allUsers?.find(u => u.email === user?.email);
 
     const onSubmit = async (formData) => {
-        // যদি ইউজার লোড না হয় বা ম্যাচ না করে তবে এরর দিবে
+        
         if (!matchedUser) {
             return toast.error("User data not found. Please wait.");
         }
@@ -30,16 +30,16 @@ const CreateMeal = () => {
         try {
             const mealData = {
                 foodName: formData.foodName,
-                chefName: formData.chefName, // ইনপুট থেকে নেওয়া নাম
+                chefName: formData.chefName, 
                 foodImage: formData.foodImage,
                 price: parseFloat(formData.price),
                 rating: parseFloat(formData.rating),
                 ingredients: formData.ingredients.split(",").map(i => i.trim()),
                 deliveryTime: formData.deliveryTime,
                 chefExperience: formData.chefExperience,
-                chefId: matchedUser.chefId || formData.chefId, // ডাটাবেজ থেকে বা ইনপুট থেকে
+                chefId: matchedUser.chefId || formData.chefId, 
                 userEmail: user?.email,
-                status: "pending", // রিভিউ এর জন্য পেন্ডিং
+                status: "pending", 
                 createdAt: new Date(),
             };
 
