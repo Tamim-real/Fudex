@@ -21,6 +21,7 @@ import OrderManagement from "../Pages/Dashboard/OrderManagement";
 import ManageUsers from "../Pages/Dashboard/ManageUsers";
 import ManageRequests from "../Pages/Dashboard/ManageRequests";
 import PlatformStatistics from "../Pages/Dashboard/PlatFormStatistics";
+import MealDetails from "../Pages/MealDetails";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
         path: "login",
         element: <Login />,
       },
+      {
+        path: "/meal-details/:id",
+        element : <MealDetails />
+      }
     ],
   },
 
