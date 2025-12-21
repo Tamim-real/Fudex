@@ -1,50 +1,70 @@
-import { useState, useEffect } from "react";
-import { 
-    Heart, 
-    Trash2, 
-    ChefHat, 
-    Calendar, 
+import { useState, useEffect, useContext } from "react";
+import {
+    Heart,
+    Trash2,
+    ChefHat,
+    Calendar,
     DollarSign,
     Utensils,
     ArrowRight
 } from "lucide-react";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../provider/AuthProvider";
+import axios from "axios";
 
 const Favorites = () => {
-    // Dummy Data (Real app-e eita fetch(`api/favorites/${user.email}`) theke ashbe)
-    const [favorites, setFavorites] = useState([
-        {
-            _id: "fav_101",
-            mealName: "Spicy Ramen Bowl",
-            chefName: "Chef Rakib",
-            price: 12.50,
-            dateAdded: "2025-12-15"
-        },
-        {
-            _id: "fav_102",
-            mealName: "Classic Beef Burger",
-            chefName: "Chef Arif",
-            price: 9.99,
-            dateAdded: "2025-12-16"
-        },
-        {
-            _id: "fav_103",
-            mealName: "Margherita Pizza",
-            chefName: "Chef Mitu",
-            price: 15.00,
-            dateAdded: "2025-12-17"
-        }
-    ]);
+    const { user, loading } = useContext(AuthContext);
+    const [favorites, setFavorites] = useState([]);
+    const [fetching, setFetching] = useState(true);
 
-    const handleDeleteFavorite = (id) => {
+    // Fetch user's favorites
+    useEffect(() => {
+        if (loading) return;
+        if (!user?.email) return;
+
+        const fetchFavorites = async () => {
+            try {
+                const res = await axios.get(`http://localhost:3000/favorites?email=${user.email}`);
+                setFavorites(res.data);  // ✅ res.data
+            } catch (err) {
+                console.error("Failed to fetch favorites:", err);
+                toast.error("Failed to load favorites");
+            } finally {
+                setFetching(false);
+            }
+        };
+
+        fetchFavorites();
+    }, [user?.email, loading]);
+
+
+    const handleDeleteFavorite = async (id) => {
         // Optimistic UI update
         const updatedFavs = favorites.filter(item => item._id !== id);
         setFavorites(updatedFavs);
-        toast.success("Removed from favorites!");
-        
-        // Backend Logic ekhane hobe:
-        // fetch(`http://localhost:3000/api/favorites/${id}`, { method: 'DELETE' })
+
+        try {
+            const res = await fetch(`http://localhost:3000/favorites/${id}`, {
+                method: "DELETE",
+            });
+
+            if (!res.ok) throw new Error("Delete failed");
+
+            toast.success("Removed from favorites!");
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to remove favorite");
+            setFavorites(favorites); // revert UI
+        }
     };
+
+    if (fetching) {
+        return (
+            <div className="min-h-[300px] flex justify-center items-center text-gray-500 font-bold text-lg">
+                Loading favorites...
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">
@@ -100,12 +120,12 @@ const Favorites = () => {
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-2 text-xs text-gray-400">
                                             <Calendar size={14} />
-                                            <span>{meal.dateAdded}</span>
+                                            <span>{meal.date}</span>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="flex justify-center items-center gap-3">
-                                            <button 
+                                            <button
                                                 onClick={() => handleDeleteFavorite(meal._id)}
                                                 className="p-2.5 text-rose-500 hover:bg-rose-100 rounded-xl transition-all"
                                                 title="Remove from favorites"

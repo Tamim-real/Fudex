@@ -15,13 +15,13 @@ const MealDetails = () => {
 
     useEffect(() => {
         // Fetch Meal Details
-        fetch(`http://localhost:3000/all-meals/${id}`)
+        fetch(`https://fudex-sever.vercel.app/all-meals/${id}`)
             .then(res => res.json())
             .then(data => setMeal(data))
             .catch(err => console.error(err));
 
         // Fetch Reviews for this meal
-        fetch(`http://localhost:3000/reviews/${id}`)
+        fetch(`https://fudex-sever.vercel.app/reviews/${id}`)
             .then(res => res.json())
             .then(data => setReviews(data))
             .catch(err => console.error(err));
@@ -39,7 +39,7 @@ const MealDetails = () => {
             deliveryTime: meal.deliveryTime,
             chefEmail: meal.userEmail,
         }
-        const res = await axios.post('http://localhost:3000/create-checkout-session', paymentInfo)
+        const res = await axios.post('https://fudex-sever.vercel.app/create-checkout-session', paymentInfo)
         window.location.href = res.data.url
     };
 
@@ -58,7 +58,7 @@ const MealDetails = () => {
         };
 
         try {
-            const res = await axios.post('http://localhost:3000/add-review', reviewData);
+            const res = await axios.post('https://fudex-sever.vercel.app/add-review', reviewData);
             if (res.data.insertedId) {
                 setReviews([reviewData, ...reviews]);
                 setNewReview("");
@@ -69,9 +69,28 @@ const MealDetails = () => {
         }
     };
 
-    const handleFavorite = () => {
-        toast.success("Added to Favorites!");
-        // Add your favorite logic here (Axios POST)
+    const handleFavorite = async() => {
+
+        const favData ={
+            userEmail: user?.email,
+            mealName: meal.foodName,
+            chefName: meal.chefName,
+            price: meal.price,
+            date: new Date().toLocaleDateString()
+        }
+
+        try {
+            const res = await axios.post('http://localhost:3000/favorites', favData);
+
+            if(res.data.insertedId){
+                toast.success("Added to Favorites!");
+            }
+            
+        } catch (err) {
+            toast.error("Failed to add review");
+        }
+        
+
     };
 
     if (!meal) {
@@ -114,7 +133,7 @@ const MealDetails = () => {
             {/* Content Section */}
             <div className="container mx-auto px-6 mt-12">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    
+
                     <div className="lg:col-span-2 space-y-10">
                         {/* Ingredients Card */}
                         <div className="bg-white p-8 rounded-[30px] shadow-sm border border-gray-100">
@@ -136,17 +155,17 @@ const MealDetails = () => {
                                     <img src={user?.photoURL} className="w-10 h-10 rounded-full ring-2 ring-orange-100" alt="" />
                                     <div className="flex gap-1 text-amber-400">
                                         {[1, 2, 3, 4, 5].map((num) => (
-                                            <Star 
-                                                key={num} 
-                                                size={18} 
-                                                className={`cursor-pointer ${num <= rating ? 'fill-amber-400' : 'text-gray-300'}`} 
+                                            <Star
+                                                key={num}
+                                                size={18}
+                                                className={`cursor-pointer ${num <= rating ? 'fill-amber-400' : 'text-gray-300'}`}
                                                 onClick={() => setRating(num)}
                                             />
                                         ))}
                                     </div>
                                 </div>
                                 <form onSubmit={handleAddReview} className="relative">
-                                    <textarea 
+                                    <textarea
                                         value={newReview}
                                         onChange={(e) => setNewReview(e.target.value)}
                                         placeholder="Share your experience with this meal..."

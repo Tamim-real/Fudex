@@ -21,7 +21,7 @@ const OrderManagement = () => {
     if (loading) return;
     if (!user?.email) return;
 
-    fetch(`http://localhost:3000/chef-orders?email=${user.email}`)
+    fetch(`https://fudex-sever.vercel.app/chef-orders?email=${user.email}`)
       .then(res => res.json())
       .then(result => setData(result))
       .catch(err => console.error(err));
@@ -29,7 +29,7 @@ const OrderManagement = () => {
 
   const updateStatus = async (id, status) => {
     try {
-      const res = await fetch(`http://localhost:3000/orders/${id}`, {
+      const res = await fetch(`https://fudex-sever.vercel.app/orders/${id}`, {
         method: "PATCH",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ orderStatus: status }),

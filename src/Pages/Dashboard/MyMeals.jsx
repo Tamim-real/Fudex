@@ -21,7 +21,7 @@ const MyMeals = () => {
   
         if (!user?.email) return;
 
-        fetch(`http://localhost:3000/my-meals?email=${user.email}`)
+        fetch(`https://fudex-sever.vercel.app/my-meals?email=${user.email}`)
             .then(res => res.json())
             .then(result => {
                 setData(result);

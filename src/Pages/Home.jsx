@@ -7,7 +7,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:3000/all-meals`)
+        fetch(`https://fudex-sever.vercel.app/all-meals`)
             .then(res => res.json())
             .then(result => setData(result))
             .catch(err => console.error(err));

@@ -13,7 +13,7 @@ import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const fetchUsers = async () => {
-  const res = await axios.get("http://localhost:3000/manage-requests");
+  const res = await axios.get("https://fudex-sever.vercel.app/manage-requests");
   return res.data;
 };
 
@@ -29,7 +29,7 @@ const ManageRequests = () => {
   const updateRoleMutation = useMutation({
     mutationFn: async (email) => {
       const res = await axios.put(
-        "http://localhost:3000/manage-requests",
+        "https://fudex-sever.vercel.app/manage-requests",
         { email }
       );
       return res.data;

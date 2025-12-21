@@ -17,7 +17,7 @@ const ManageUsers = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
     const fetchUsers = async () => {
-        const res = await axios.get("http://localhost:3000/all-users");
+        const res = await axios.get("https://fudex-sever.vercel.app/all-users");
         return res.data;
     };
 
@@ -30,7 +30,7 @@ const ManageUsers = () => {
     const handleMakeFraud = async (email) => {
         try {
            
-            const res = await axios.patch(`http://localhost:3000/users/fraud/${email}`);
+            const res = await axios.patch(`https://fudex-sever.vercel.app/users/fraud/${email}`);
             
             if (res.data.modifiedCount > 0) {
                 toast.success("User marked as Fraud!");

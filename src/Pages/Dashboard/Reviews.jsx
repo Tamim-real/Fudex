@@ -20,7 +20,7 @@ const Reviews = () => {
     useEffect(() => {
         if (loading || !user?.email) return;
 
-        axios.get(`http://localhost:3000/my-review/${user.email}`)
+        axios.get(`https://fudex-sever.vercel.app/my-review/${user.email}`)
             .then(res => {
                 setReviews(res.data);
                 setIsFetching(false);
@@ -34,7 +34,7 @@ const Reviews = () => {
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this review?")) {
             try {
-                const res = await axios.delete(`http://localhost:3000/reviews/${id}`);
+                const res = await axios.delete(`https://fudex-sever.vercel.app/reviews/${id}`);
                 if (res.data.deletedCount > 0) {
                     setReviews(reviews.filter(review => review._id !== id));
                     toast.success("Review deleted successfully");

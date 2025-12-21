@@ -14,7 +14,7 @@ const CreateMeal = () => {
     const { data: allUsers = [], isLoading } = useQuery({
         queryKey: ["allUsers"],
         queryFn: async () => {
-            const res = await axios.get("http://localhost:3000/all-users");
+            const res = await axios.get("https://fudex-sever.vercel.app/all-users");
             return res.data;
         },
     });
@@ -43,7 +43,7 @@ const CreateMeal = () => {
                 createdAt: new Date(),
             };
 
-            const response = await axios.post("http://localhost:3000/create-meal", mealData);
+            const response = await axios.post("https://fudex-sever.vercel.app/create-meal", mealData);
 
             if (response.data.insertedId) {
                 toast.success("Meal details submitted successfully!");

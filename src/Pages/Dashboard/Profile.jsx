@@ -19,7 +19,7 @@ const Profile = ({ requestRole }) => {
     const { user } = useContext(AuthContext);
 
     const fetchUsers = async () => {
-        const res = await axios.get("http://localhost:3000/all-users");
+        const res = await axios.get("https://fudex-sever.vercel.app/all-users");
         return res.data;
     };
 

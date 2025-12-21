@@ -24,6 +24,7 @@ import PlatformStatistics from "../Pages/Dashboard/PlatFormStatistics";
 import MealDetails from "../Pages/MealDetails";
 import PaymentSuccess from "../Pages/PaymentSuccess";
 import PaymentCancelled from "../Pages/PaymentCancelled";
+import AllMeals from "../Pages/AllMeals";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path:'/meals',
+        element: <AllMeals />
+
       },
       {
         path: "register",

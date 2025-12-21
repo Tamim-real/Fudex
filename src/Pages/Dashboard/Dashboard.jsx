@@ -40,7 +40,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:3000/users/role/${user.email}`)
+            fetch(`https://fudex-sever.vercel.app/users/role/${user.email}`)
                 .then(res => res.json())
                 .then(data => setRole(data.role))
                 .catch(err => console.error("Error fetching role:", err));
@@ -49,7 +49,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (user?.uid) {
-            fetch(`http://localhost:3000/api/my-role-requests/${user.uid}`)
+            fetch(`https://fudex-sever.vercel.app/api/my-role-requests/${user.uid}`)
                 .then(res => res.json())
                 .then(data => setPendingRequests(data))
                 .catch(err => console.error("Error fetching status:", err));
@@ -72,7 +72,7 @@ const Dashboard = () => {
 
     const requestRole = async (roleName) => {
         try {
-            const res = await fetch("http://localhost:3000/api/role-request", {
+            const res = await fetch("https://fudex-sever.vercel.app/api/role-request", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

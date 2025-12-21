@@ -16,7 +16,7 @@ const Orders = () => {
     if (loading) return;
     if (!user?.email) return;
 
-    fetch(`http://localhost:3000/customer-orders?email=${user.email}`)
+    fetch(`https://fudex-sever.vercel.app/customer-orders?email=${user.email}`)
       .then(res => res.json())
       .then(result => setData(result))
       .catch(err => console.error(err));
