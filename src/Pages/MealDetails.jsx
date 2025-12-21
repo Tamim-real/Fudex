@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { AuthContext } from '../provider/AuthProvider';
+import axios from 'axios';
 
 const MealDetails = () => {
     const { id } = useParams();
     const [meal, setMeal] = useState(null);
+    const {user} = useContext(AuthContext)
 
     useEffect(() => {
         fetch(`http://localhost:3000/all-meals/${id}`)
@@ -11,6 +14,21 @@ const MealDetails = () => {
             .then(data => setMeal(data))
             .catch(err => console.error(err));
     }, [id]);
+
+    const handlePayment=async()=>{
+
+        const paymentInfo={
+            cost: meal.price,
+            foodName: meal.foodName,
+            foodId: meal._id,
+            customer_email: user.email,
+
+
+        }
+        const res = await axios.post('http://localhost:3000/create-checkout-session', paymentInfo)
+        window.location.href = res.data.url
+        
+    }
 
     if (!meal) {
         return <div className="min-h-screen flex justify-center items-center font-bold text-2xl animate-pulse">Loading...</div>;
@@ -140,7 +158,7 @@ const MealDetails = () => {
                             </div>
 
                             {/* MODERN ORDER BUTTON */}
-                            <button className="group w-full h-16 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xl transition-all duration-300 flex items-center justify-center gap-3 active:scale-95 shadow-lg shadow-orange-500/40">
+                            <button onClick={handlePayment} className="group w-full h-16 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xl transition-all duration-300 flex items-center justify-center gap-3 active:scale-95 shadow-lg shadow-orange-500/40">
                                 ORDER NOW
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
