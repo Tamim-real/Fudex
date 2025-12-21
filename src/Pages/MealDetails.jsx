@@ -22,6 +22,11 @@ const MealDetails = () => {
             foodName: meal.foodName,
             foodId: meal._id,
             customer_email: user.email,
+            chefName: meal.chefName,
+            chefId : meal.chefId,
+            foodImage: meal.foodImage,
+            deliveryTime: meal.deliveryTime
+
 
 
         }

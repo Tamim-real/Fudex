@@ -22,6 +22,8 @@ import ManageUsers from "../Pages/Dashboard/ManageUsers";
 import ManageRequests from "../Pages/Dashboard/ManageRequests";
 import PlatformStatistics from "../Pages/Dashboard/PlatFormStatistics";
 import MealDetails from "../Pages/MealDetails";
+import PaymentSuccess from "../Pages/PaymentSuccess";
+import PaymentCancelled from "../Pages/PaymentCancelled";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ const router = createBrowserRouter([
       {
         path: "/meal-details/:id",
         element : <MealDetails />
+      },
+      {
+        path: '/payment-success',
+        element: <PaymentSuccess />
+      },
+      {
+        path: 'dashboard/payment-cancelled',
+        element: <PaymentCancelled />
       }
     ],
   },
