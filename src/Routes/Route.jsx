@@ -13,7 +13,7 @@ import Login from "../Pages/Login";
 import Dashboard from "../Pages/Dashboard/Dashboard";
 import Profile from "../Pages/Dashboard/Profile";
 import Orders from "../Pages/Dashboard/Orders";
-import Reviews from "../Pages/Dashboard/Reviews";
+import Reviews from "../Pages/Dashboard/MyReviews";
 import Favorites from "../Pages/Dashboard/Favorites";
 import CreateMeal from "../Pages/Dashboard/CreateMeal";
 import MyMeals from "../Pages/Dashboard/MyMeals";
@@ -26,6 +26,7 @@ import PaymentSuccess from "../Pages/PaymentSuccess";
 import PaymentCancelled from "../Pages/PaymentCancelled";
 import AllMeals from "../Pages/AllMeals";
 import ErrorPage from "../Pages/ErrorPage";
+import MyReviews from "../Pages/Dashboard/MyReviews";
 
 const router = createBrowserRouter([
   {
@@ -87,7 +88,7 @@ const router = createBrowserRouter([
       },
       {
         path: "reviews",
-        element: <Reviews />,
+        element: <MyReviews />,
       },
       {
         path: "favorites",

@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { AuthContext } from "../../provider/AuthProvider";
 
-const Reviews = () => {
+const MyReviews = () => {
     const { user, loading } = useContext(AuthContext);
     const [reviews, setReviews] = useState([]); 
     const [isFetching, setIsFetching] = useState(true);
@@ -150,4 +150,4 @@ const Reviews = () => {
     );
 };
 
-export default Reviews;
+export default MyReviews;
