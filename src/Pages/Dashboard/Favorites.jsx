@@ -44,7 +44,7 @@ const Favorites = () => {
        
 
         try {
-            const res = await fetch(`http://localhost:3000/favorites/${id}`, {
+            const res = await fetch(`https://fudex-sever.vercel.app/favorites/${id}`, {
                 method: "DELETE",
             });
             setFavorites((prev) => prev.filter(item => item._id !== id));

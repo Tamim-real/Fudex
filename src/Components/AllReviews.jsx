@@ -6,7 +6,7 @@ const AllReviews = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/reviews")
+    fetch("https://fudex-sever.vercel.app/reviews")
       .then((res) => res.json())
       .then((data) => {
         setReviews(Array.isArray(data) ? data : data.reviews || []);

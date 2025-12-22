@@ -40,7 +40,7 @@ const MyReviews = () => {
     const handleUpdateSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.patch(`http://localhost:3000/reviews/${selectedReview._id}`, {
+            const res = await axios.patch(`https://fudex-sever.vercel.app/reviews/${selectedReview._id}`, {
                 rating: newRating,
                 comment: newComment
             });
@@ -60,7 +60,7 @@ const MyReviews = () => {
         if (window.confirm("Are you sure?")) {
             try {
                 
-                const res = await axios.delete(`http://localhost:3000/reviews/${id}`);
+                const res = await axios.delete(`https://fudex-sever.vercel.app/reviews/${id}`);
                 if (res.data.deletedCount > 0) {
                     setReviews(reviews.filter(review => review._id !== id));
                     toast.success("Deleted successfully");

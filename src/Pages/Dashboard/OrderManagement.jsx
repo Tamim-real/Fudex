@@ -29,7 +29,7 @@ const OrderManagement = () => {
 
  const updateStatus = async (id, status) => {
   try {
-    const res = await fetch(`http://localhost:3000/chef-orders/${id}`, {
+    const res = await fetch(`https://fudex-sever.vercel.app/chef-orders/${id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ status }), 
