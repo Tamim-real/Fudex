@@ -27,6 +27,7 @@ import PaymentCancelled from "../Pages/PaymentCancelled";
 import AllMeals from "../Pages/AllMeals";
 import ErrorPage from "../Pages/ErrorPage";
 import MyReviews from "../Pages/Dashboard/MyReviews";
+import PrivateRoute from "../Components/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -53,7 +54,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/meal-details/:id",
-        element : <MealDetails />
+        element : <PrivateRoute><MealDetails /></PrivateRoute>
       },
       {
         path: '/payment-success',

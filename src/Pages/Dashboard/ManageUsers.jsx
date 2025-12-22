@@ -26,7 +26,7 @@ const ManageUsers = () => {
         queryFn: fetchUsers,
     });
 
-    // Mark Fraud logic (ID দিয়ে ফিক্স করা হয়েছে)
+   
     const handleMakeFraud = async (email) => {
         try {
            
