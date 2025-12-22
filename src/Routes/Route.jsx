@@ -25,11 +25,13 @@ import MealDetails from "../Pages/MealDetails";
 import PaymentSuccess from "../Pages/PaymentSuccess";
 import PaymentCancelled from "../Pages/PaymentCancelled";
 import AllMeals from "../Pages/AllMeals";
+import ErrorPage from "../Pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement : <ErrorPage />,
     children: [
       {
         index: true,
@@ -59,6 +61,9 @@ const router = createBrowserRouter([
       {
         path: 'dashboard/payment-cancelled',
         element: <PaymentCancelled />
+      },
+      {
+        errorElement: <ErrorPage />
       }
     ],
   },
