@@ -80,7 +80,7 @@ const MealDetails = () => {
         }
 
         try {
-            const res = await axios.post('http://localhost:3000/favorites', favData);
+            const res = await axios.post('https://fudex-sever.vercel.app/favorites', favData);
 
             if(res.data.insertedId){
                 toast.success("Added to Favorites!");

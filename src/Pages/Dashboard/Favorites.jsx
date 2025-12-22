@@ -11,6 +11,7 @@ import {
 import toast from "react-hot-toast";
 import { AuthContext } from "../../provider/AuthProvider";
 import axios from "axios";
+import { Link } from "react-router";
 
 const Favorites = () => {
     const { user, loading } = useContext(AuthContext);
@@ -24,7 +25,7 @@ const Favorites = () => {
 
         const fetchFavorites = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/favorites?email=${user.email}`);
+                const res = await axios.get(`https://fudex-sever.vercel.app/favorites?email=${user.email}`);
                 setFavorites(res.data);  // ✅ res.data
             } catch (err) {
                 console.error("Failed to fetch favorites:", err);
@@ -39,14 +40,14 @@ const Favorites = () => {
 
 
     const handleDeleteFavorite = async (id) => {
-        // Optimistic UI update
-        const updatedFavs = favorites.filter(item => item._id !== id);
-        setFavorites(updatedFavs);
+        
+       
 
         try {
             const res = await fetch(`http://localhost:3000/favorites/${id}`, {
                 method: "DELETE",
             });
+            setFavorites((prev) => prev.filter(item => item._id !== id));
 
             if (!res.ok) throw new Error("Delete failed");
 
@@ -54,7 +55,7 @@ const Favorites = () => {
         } catch (err) {
             console.error(err);
             toast.error("Failed to remove favorite");
-            setFavorites(favorites); // revert UI
+           
         }
     };
 
@@ -150,9 +151,9 @@ const Favorites = () => {
                         </div>
                         <h3 className="text-xl font-bold text-gray-800">Your heart is empty!</h3>
                         <p className="text-gray-500 mt-1 mb-6">You haven't added any meals to your favorites yet.</p>
-                        <button className="px-6 py-2.5 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition shadow-lg shadow-orange-100">
+                        <Link to='/meals' className="px-6 py-2.5 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition shadow-lg shadow-orange-100">
                             Browse Meals
-                        </button>
+                        </Link>
                     </div>
                 )}
             </div>
