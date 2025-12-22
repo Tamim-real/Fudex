@@ -70,30 +70,7 @@ const Dashboard = () => {
         return pendingRequests.some(req => req.requestedRole === roleName && req.status === "pending");
     };
 
-    const requestRole = async (roleName) => {
-        try {
-            const res = await fetch("https://fudex-sever.vercel.app/api/role-request", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    userId: user.uid,
-                    name: user?.displayName,
-                    email: user?.email,
-                    requestedRole: roleName,
-                }),
-            });
-
-            const data = await res.json();
-            if (!res.ok) {
-                toast.error(data.message);
-                return;
-            }
-            toast.success(`Request for ${roleName} sent successfully!`);
-            setPendingRequests([...pendingRequests, { requestedRole: roleName, status: "pending" }]);
-        } catch (err) {
-            toast.error("Something went wrong!");
-        }
-    };
+    
 
     const SidebarContent = ({ onNavClick }) => (
         <div className="h-full flex flex-col justify-between">
@@ -183,6 +160,7 @@ const Dashboard = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex">
+            <title>Dashboard</title>
             {/* Mobile Button */}
             {!mobileOpen && (
                 <button onClick={() => setMobileOpen(true)} className="md:hidden fixed top-4 left-4 z-50 bg-orange-500 text-white p-2 rounded-lg shadow-lg">

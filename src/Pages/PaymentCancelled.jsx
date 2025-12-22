@@ -4,6 +4,7 @@ import { XCircle, AlertCircle, RefreshCw, CreditCard, ChevronLeft } from 'lucide
 const PaymentCancelled = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+      <title>Payment Cancel</title>
       {/* Main Error Card */}
       <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden p-8 text-center border border-red-50 relative">
         

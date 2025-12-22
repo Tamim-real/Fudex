@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 const ErrorPage = () => {
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
+        <title>Error 404</title>
       <div className="max-w-md text-center">
         {/* Animated Visual */}
         <motion.div

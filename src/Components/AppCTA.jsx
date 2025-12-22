@@ -40,7 +40,7 @@ const AppCTA = () => {
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center gap-3 bg-black text-white px-6 py-3 rounded-xl border border-gray-800 transition-all shadow-lg"
               >
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Apple_logo_black.svg" alt="Apple" className="w-6 invert" />
+                <img src="https://i.ibb.co.com/35QLdMyj/app-Store.jpg" alt="Apple" className="w-6 " />
                 <div className="text-left">
                   <p className="text-[10px] uppercase">Download on the</p>
                   <p className="text-sm font-bold">App Store</p>
@@ -52,7 +52,7 @@ const AppCTA = () => {
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center gap-3 bg-black text-white px-6 py-3 rounded-xl border border-gray-800 transition-all shadow-lg"
               >
-                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Google_Play_Store_badge_EN.svg" alt="Play Store" className="w-6" />
+                <img src="https://i.ibb.co.com/b5kKJGyK/play-store.png" alt="Play Store" className="w-6" />
                 <div className="text-left">
                   <p className="text-[10px] uppercase">Get it on</p>
                   <p className="text-sm font-bold">Google Play</p>
@@ -72,7 +72,7 @@ const AppCTA = () => {
             >
               {/* Using a placeholder for a mobile app mockup */}
               <img 
-                src="https://www.freeiconspng.com/uploads/iphone-x-png-17.png" 
+                src="https://foodibd.com/_next/static/media/mobile.73da0fee.svg" 
                 alt="Fudex App" 
                 className="w-[280px] md:w-[350px] drop-shadow-[0_35px_35px_rgba(0,0,0,0.4)]"
               />

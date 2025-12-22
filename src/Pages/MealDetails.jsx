@@ -99,6 +99,7 @@ const MealDetails = () => {
 
     return (
         <div className="bg-gray-50 min-h-screen pb-20 font-sans">
+            <title>Meal Details</title>
             {/* Header Section (Existing) */}
             <div className="bg-white border-b pt-10 pb-12">
                 <div className="container mx-auto px-6">

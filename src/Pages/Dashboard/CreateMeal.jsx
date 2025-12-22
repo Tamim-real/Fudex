@@ -10,7 +10,7 @@ const CreateMeal = () => {
     const { user } = useContext(AuthContext);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-    // ইউজারের তথ্য নিয়ে আসা যাতে Chef ID এবং অন্যান্য তথ্য পাওয়া যায়
+    
     const { data: allUsers = [], isLoading } = useQuery({
         queryKey: ["allUsers"],
         queryFn: async () => {
@@ -59,6 +59,7 @@ const CreateMeal = () => {
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-3xl shadow-xl border border-orange-100 mt-10 mb-10">
+            <title>CreateMeal</title>
             <div className="flex items-center gap-3 mb-8 border-b pb-4">
                 <Utensils className="text-orange-500" size={32} />
                 <h2 className="text-3xl font-bold text-gray-800">Create New Meal</h2>

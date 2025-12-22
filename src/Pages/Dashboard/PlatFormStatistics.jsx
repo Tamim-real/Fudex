@@ -67,6 +67,7 @@ const PlatformStatistics = () => {
 
     return (
         <div className="space-y-8 pb-10">
+            <title>Statistic</title>
             {/* Page Header */}
             <div>
                 <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">

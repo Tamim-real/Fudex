@@ -45,6 +45,7 @@ const MyMeals = () => {
     return (
         <div className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <title>My Meals</title>
                 <div>
                     <h2 className="text-2xl font-bold text-gray-800">My Special Meals</h2>
                     <p className="text-gray-500 text-sm">Manage and monitor all your culinary creations</p>

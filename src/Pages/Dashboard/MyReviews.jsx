@@ -86,6 +86,7 @@ const MyReviews = () => {
 
     return (
         <div className="space-y-6 max-w-5xl mx-auto relative px-4">
+            <title>My Reviews</title>
             {/* Header Content remains same... */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div>

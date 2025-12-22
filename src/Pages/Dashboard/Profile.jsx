@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
     Mail,
     MapPin,
@@ -14,16 +14,52 @@ import {
 import { AuthContext } from "../../provider/AuthProvider";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
-const Profile = ({ requestRole }) => {
+const Profile = () => {
     const { user } = useContext(AuthContext);
+    const [pendingRequests, setPendingRequests] = useState([]);
+
+    // 1. requestRole Function Implementation
+    const requestRole = async (roleName) => {
+        if (!user) return toast.error("Please login first!");
+
+        try {
+            const res = await fetch("https://fudex-sever.vercel.app/api/role-request", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: user.uid,
+                    name: user?.displayName,
+                    email: user?.email,
+                    requestedRole: roleName,
+                }),
+            });
+
+            const data = await res.json();
+            
+            if (!res.ok) {
+                toast.error(data.message || "Request failed");
+                return;
+            }
+            
+            toast.success(`Request for ${roleName} sent successfully!`);
+            
+            // Pending request update kora hocche jate UI te feedback thake
+            setPendingRequests([...pendingRequests, { requestedRole: roleName, status: "pending" }]);
+            
+        } catch (err) {
+            console.error(err);
+            toast.error("Something went wrong!");
+        }
+    };
 
     const fetchUsers = async () => {
         const res = await axios.get("https://fudex-sever.vercel.app/all-users");
         return res.data;
     };
 
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["allUsers"],
         queryFn: fetchUsers,
     });
@@ -49,13 +85,11 @@ const Profile = ({ requestRole }) => {
 
     return (
         <div className="max-w-5xl mx-auto py-12 px-4 font-sans">
+            <title>Profile</title>
             <div className="relative group">
-               
                 <div className="absolute -inset-1 bg-gradient-to-r from-orange-400 to-rose-400 rounded-[3rem] blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
 
-               
                 <div className="relative bg-white rounded-[3rem] shadow-2xl border border-gray-50 overflow-hidden">
-
                     {/* Cover Section */}
                     <div className="h-48 bg-gradient-to-br from-gray-900 via-orange-900 to-rose-900 relative">
                         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
@@ -91,56 +125,44 @@ const Profile = ({ requestRole }) => {
                         </div>
 
                         {/* Info Cards Grid */}
-                        {/* Info Cards Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                            {/* Card 1: Email  */}
                             <div className="group/card p-6 bg-gray-50 rounded-[2rem] border border-gray-100 hover:bg-white hover:shadow-xl hover:shadow-orange-100/50 transition-all duration-300">
-                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-orange-500 shadow-sm mb-4 group-hover/card:scale-110 transition-transform">
+                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-orange-500 shadow-sm mb-4">
                                     <Mail size={24} />
                                 </div>
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Email</p>
                                 <p className="text-sm font-bold text-gray-700 truncate">{matchedUser?.email}</p>
                             </div>
 
-                            {/* Card 2: Location */}
                             <div className="group/card p-6 bg-gray-50 rounded-[2rem] border border-gray-100 hover:bg-white hover:shadow-xl hover:shadow-orange-100/50 transition-all duration-300">
-                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-rose-500 shadow-sm mb-4 group-hover/card:scale-110 transition-transform">
+                                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-rose-500 shadow-sm mb-4">
                                     <MapPin size={24} />
                                 </div>
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Location</p>
                                 <p className="text-sm font-bold text-gray-700">{matchedUser?.address || "Location Not Set"}</p>
                             </div>
 
-                            {/* Card 3: Conditional Chef ID or User Badge */}
                             {matchedUser?.role === "chef" ? (
-                                
                                 <div className="group/card p-6 bg-orange-50 rounded-[2rem] border border-orange-100 hover:bg-white hover:shadow-xl transition-all duration-300">
-                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-orange-600 shadow-sm mb-4 group-hover/card:scale-110 transition-transform">
+                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-orange-600 shadow-sm mb-4">
                                         <Hash size={24} />
                                     </div>
                                     <p className="text-[10px] font-black text-orange-400 uppercase tracking-widest mb-1 italic">Chef Identifier</p>
-                                    <p className="text-lg font-black text-orange-600 tracking-tighter">
-                                        {matchedUser?.chefId}
-                                    </p>
+                                    <p className="text-lg font-black text-orange-600 tracking-tighter">{matchedUser?.chefId}</p>
                                 </div>
                             ) : (
-                               
                                 <div className="group/card p-6 bg-blue-50 rounded-[2rem] border border-blue-100 hover:bg-white hover:shadow-xl transition-all duration-300">
-                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm mb-4 group-hover/card:scale-110 transition-transform">
+                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm mb-4">
                                         <BadgeCheck size={24} />
                                     </div>
                                     <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Account Tier</p>
-                                    <p className="text-lg font-black text-blue-700 capitalize">
-                                        {matchedUser?.role || "Verified User"}
-                                    </p>
+                                    <p className="text-lg font-black text-blue-700 capitalize">{matchedUser?.role || "Verified User"}</p>
                                 </div>
                             )}
                         </div>
 
                         {/* Account Management / Actions */}
                         <div className="mt-10 p-8 rounded-[2.5rem] bg-gray-900 relative overflow-hidden">
-                            {/* Decorative background circle */}
                             <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full -mr-32 -mt-32"></div>
 
                             <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
@@ -153,7 +175,7 @@ const Profile = ({ requestRole }) => {
                                     {matchedUser?.role !== 'chef' && matchedUser?.role !== 'admin' && (
                                         <button
                                             onClick={() => requestRole('chef')}
-                                            className="flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-orange-600 hover:-translate-y-1 transition-all shadow-lg shadow-orange-500/25"
+                                            className="flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-orange-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-orange-600 hover:-translate-y-1 transition-all shadow-lg"
                                         >
                                             <ChefHat size={18} /> Be a Chef
                                         </button>
@@ -170,7 +192,6 @@ const Profile = ({ requestRole }) => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

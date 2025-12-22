@@ -63,6 +63,7 @@ const ManageUsers = () => {
 
     return (
         <div className="space-y-6">
+            <title>ManageUsers</title>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
                 <div>
                     <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">

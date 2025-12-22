@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 const PaymentSuccess = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+      <title>Payment Success</title>
       {/* Main Card */}
       <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden p-8 text-center relative">
         

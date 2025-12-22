@@ -39,6 +39,7 @@ const Orders = () => {
 
   return (
     <div className="space-y-6">
+      <title>My Orders</title>
       {/* Header */}
       <div className="flex items-center justify-between bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
         <div>
