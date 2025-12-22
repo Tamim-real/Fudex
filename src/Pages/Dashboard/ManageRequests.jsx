@@ -25,7 +25,7 @@ const ManageRequests = () => {
     queryFn: fetchUsers,
   });
 
-  /* ✅ FIXED: mutation before handler */
+ 
   const updateRoleMutation = useMutation({
     mutationFn: async (email) => {
       const res = await axios.put(
@@ -34,12 +34,13 @@ const ManageRequests = () => {
       );
       return res.data;
     },
-    onSuccess: () => {
-      toast.success("Role updated successfully");
+    onSuccess: (data) => {
+     
+      toast.success(data.message || "Request approved successfully!");
       queryClient.invalidateQueries(["allUsers"]);
     },
-    onError: () => {
-      toast.error("Failed to update role");
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to process request");
     },
   });
 
@@ -136,11 +137,10 @@ const ManageRequests = () => {
                   <td className="px-6 py-4">
                     <div
                       className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider
-                      ${
-                        req.requestedRole === "admin"
+                      ${req.requestedRole === "admin"
                           ? "bg-purple-100 text-purple-600"
                           : "bg-blue-100 text-blue-600"
-                      }`}
+                        }`}
                     >
                       <UserPlus size={12} /> {req.requestedRole}
                     </div>
@@ -158,13 +158,12 @@ const ManageRequests = () => {
                   <td className="px-6 py-4">
                     <div
                       className={`inline-flex items-center gap-1.5 text-xs font-bold px-2 py-1 rounded-md
-                      ${
-                        req.status === "pending"
+                      ${req.status === "pending"
                           ? "bg-yellow-50 text-yellow-600"
                           : req.status === "approved"
-                          ? "bg-green-50 text-green-600"
-                          : "bg-red-50 text-red-600"
-                      }`}
+                            ? "bg-green-50 text-green-600"
+                            : "bg-red-50 text-red-600"
+                        }`}
                     >
                       <Clock size={14} />
                       <span className="capitalize">{req.status}</span>
@@ -180,19 +179,18 @@ const ManageRequests = () => {
                         }
                         onClick={() => handleRoleUpdate(req.email)}
                         className={`p-2 rounded-xl transition shadow-sm
-                        ${
-                          req.status === "pending"
+                        ${req.status === "pending"
                             ? "bg-green-500 text-white hover:bg-green-600"
                             : "bg-gray-100 text-gray-300 cursor-not-allowed"
-                        }`}
+                          }`}
                         title="Accept Request"
                       >
                         <CheckCircle size={20} />
                       </button>
 
-                      {/* UI unchanged, logic disabled */}
+
                       <button
-                        disabled
+
                         className="p-2 rounded-xl bg-gray-100 text-gray-300 cursor-not-allowed shadow-sm"
                         title="Reject Request"
                       >
