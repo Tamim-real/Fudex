@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Slider from '../Components/Slder';
 import { useNavigate } from 'react-router';
+import AllReviews from '../Components/AllReviews';
+import AppCTA from '../Components/AppCTA';
 
 const Home = () => {
     const [data, setData] = useState([]);
@@ -114,6 +116,11 @@ const Home = () => {
                     }
                 </div>
             </section>
+            {/* reviews section */}
+            <section className='reviews'>
+                    <AllReviews />
+            </section>
+            <AppCTA />
         </div>
     );
 };
