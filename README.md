@@ -47,7 +47,7 @@ The goal of Fudex is to provide a streamlined, real-time dashboard for food orde
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/fudex.git](https://github.com/your-username/fudex.git)
+    git clone [https://github.com/Tamim-real/Fudex]
     ```
 2.  **Install Client & Server dependencies:**
     ```bash
