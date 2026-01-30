@@ -15,111 +15,104 @@ const Home = () => {
             .catch(err => console.error(err));
     }, []);
 
-    const handleDetail =(id)=>{
+    const handleDetail = (id) => {
         navigate(`/meal-details/${id}`);
     }
+
     return (
-        <div className="bg-gray-50 min-h-screen">
+        <div className="bg-[#F8FAFC] min-h-screen">
             <Slider />
 
-            <section className='container mx-auto px-4 py-12'>
-                <div className="text-center mb-12">
-                    <h1 className='text-4xl font-extrabold text-gray-800 tracking-wide'>
-                        Daily <span className="text-orange-500">Delights</span>
+            <section className='container mx-auto px-6 py-20'>
+                {/* Section Header */}
+                <div className="flex flex-col items-center text-center mb-16">
+                    <span className="px-4 py-1.5 bg-orange-100 text-orange-600 text-xs font-bold uppercase tracking-widest rounded-full mb-4">
+                        Explore Recipes
+                    </span>
+                    <h1 className='text-4xl md:text-5xl font-black text-slate-900 leading-tight'>
+                        Daily <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">Delights</span>
                     </h1>
-                    <p className="text-gray-500 mt-2">Discover the best meals curated by top chefs</p>
-                    <div className="h-1 w-20 bg-orange-500 mx-auto mt-4 rounded-full"></div>
+                    <p className="text-slate-500 mt-4 max-w-lg text-lg">
+                        Discover the best meals curated by world-class chefs, delivered fresh to your doorstep.
+                    </p>
                 </div>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-                    {
-                        data.map(meal => (
-                            <div key={meal._id} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col justify-between">
-
-                                {/* Image Wrapper */}
-                                <div className='relative h-64 overflow-hidden'>
-                                    <img
-                                        src={meal.foodImage}
-                                        alt={meal.foodName}
-                                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                                    />
-
-                                    {/* Price Badge */}
-                                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg shadow-sm font-bold text-orange-600 text-lg">
+                {/* Grid Layout */}
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10'>
+                    {data.map(meal => (
+                        <div key={meal._id} className="group relative bg-white rounded-[2rem] p-4 transition-all duration-500 hover:-translate-y-2 border border-slate-100 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-15px_rgba(255,115,0,0.2)]">
+                            
+                            {/* Image Container */}
+                            <div className='relative h-64 w-full rounded-[1.5rem] overflow-hidden shadow-inner'>
+                                <img
+                                    src={meal.foodImage}
+                                    alt={meal.foodName}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                />
+                                {/* Overlays */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                
+                                {/* Top Badges */}
+                                <div className="absolute top-3 left-3 flex gap-2">
+                                    <span className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-sm font-black text-slate-900 text-sm">
                                         ${meal.price}
-                                    </div>
-
-                                    {/* Rating Badge */}
-                                    <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-white px-2 py-1 rounded-lg flex items-center gap-1 text-sm font-semibold">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-yellow-400">
-                                            <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.005Z" clipRule="evenodd" />
-                                        </svg>
-                                        {meal.rating}
-                                    </div>
+                                    </span>
                                 </div>
 
-                                {/* Card Body */}
-                                <div className="p-6 flex flex-col flex-grow">
-
-                                    {/* MEAL NAME (New Addition) */}
-                                    {/* Note: Check if your API key is 'title', 'name', or 'mealName' */}
-                                    <h2 className="text-2xl font-bold text-gray-800 mb-1 group-hover:text-orange-600 transition-colors line-clamp-1" title={meal.title}>
-                                        {meal.foodName}
-                                    </h2>
-
-                                    {/* Chef Info */}
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
-                                            C
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-semibold text-gray-600">
-                                                {meal.chefName}
-                                            </p>
-                                            <p className="text-[10px] text-gray-400 uppercase tracking-wide">
-                                                ID: {meal.chefId}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {/* Delivery Area Section */}
-                                    <div className="mb-6">
-                                        <div className="flex items-center gap-2 text-sm bg-orange-50 p-2 rounded-lg border border-orange-100">
-                                            {/* Location Icon */}
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-orange-600">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                                            </svg>
-
-                                           
-                                            <span className='font-bold text-gray-800 uppercase text-[12px] tracking-tight'>
-                                                Delivery: {meal.deliveryArea }
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Action Button */}
-                                    <div className="mt-auto">
-                                        <button onClick={()=>handleDetail(meal._id)} className="w-full relative overflow-hidden bg-gray-900 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group/btn">
-                                            <span className="relative z-10 flex items-center justify-center gap-2">
-                                                See Details
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                                </svg>
-                                            </span>
-                                            <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-orange-500 to-red-500 transform scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-300 origin-left"></div>
-                                        </button>
-                                    </div>
+                                <div className="absolute top-3 right-3 bg-orange-500 text-white px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 text-xs font-bold shadow-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-yellow-300">
+                                        <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.005Z" clipRule="evenodd" />
+                                    </svg>
+                                    {meal.rating}
                                 </div>
                             </div>
-                        ))
-                    }
+
+                            {/* Content */}
+                            <div className="pt-6 pb-2 px-2">
+                                <div className="flex justify-between items-start mb-3">
+                                    <h2 className="text-xl font-extrabold text-slate-800 group-hover:text-orange-600 transition-colors duration-300">
+                                        {meal.foodName}
+                                    </h2>
+                                </div>
+
+                                {/* Chef & Info Wrapper */}
+                                <div className="flex items-center justify-between mb-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-orange-400 to-red-500 border-2 border-white shadow-md flex items-center justify-center text-white font-bold">
+                                            {meal.chefName?.charAt(0) || 'C'}
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-bold text-slate-700">{meal.chefName}</span>
+                                            <span className="text-[10px] font-medium text-slate-400 uppercase tracking-tighter">Master Chef</span>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className="block text-[10px] text-slate-400 uppercase font-bold tracking-widest">Region</span>
+                                        <span className="text-xs font-black text-orange-600 italic">{meal.deliveryArea}</span>
+                                    </div>
+                                </div>
+
+                                {/* Modern Action Button */}
+                                <button 
+                                    onClick={() => handleDetail(meal._id)} 
+                                    className="w-full bg-slate-900 hover:bg-orange-600 text-white font-bold py-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-xl shadow-slate-200 hover:shadow-orange-200"
+                                >
+                                    View Details
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 group-hover/btn:translate-x-2 transition-transform duration-300">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </section>
-            {/* reviews section */}
-            <section className='reviews'>
-                    <AllReviews />
+
+            {/* Reviews Section */}
+            <section className='pb-20'>
+                <AllReviews />
             </section>
+            
             <AppCTA />
         </div>
     );
