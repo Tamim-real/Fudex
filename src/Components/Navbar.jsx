@@ -1,155 +1,168 @@
-import { useState, useContext } from "react";
+"use client";
+
+import { useState, useContext, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, LayoutDashboard, LogOut, Home, Utensils } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../provider/AuthProvider";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { user, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const navLinkStyle = ({ isActive }) =>
-    `relative font-medium transition ${
-      isActive
-        ? "text-orange-500 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-full after:bg-orange-500"
-        : "text-gray-700 hover:text-orange-500"
-    }`;
+  // Scroll detection for glass effect
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogout = async () => {
     try {
       await logOut();
       setDropdown(false);
+      setOpen(false);
       navigate("/login");
     } catch (err) {
       console.log(err);
     }
   };
 
+  const navLinks = [
+    { name: "Home", path: "/", icon: <Home size={18} /> },
+    { name: "Meals", path: "/meals", icon: <Utensils size={18} /> },
+    ...(user ? [{ name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> }] : []),
+  ];
+
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <nav className={`sticky top-0 z-50 transition-all duration-300 ${
+      scrolled ? "bg-white/70 backdrop-blur-md py-3 shadow-lg" : "bg-white py-5"
+    }`}>
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        
+        {/* Logo with Motion */}
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Link to="/" className="text-3xl font-black bg-gradient-to-r from-orange-500 via-pink-500 to-rose-500 bg-clip-text text-transparent italic">
+            Fudex
+          </Link>
+        </motion.div>
 
-        {/* Logo */}
-        <Link
-          to="/"
-          className="text-3xl font-extrabold bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent"
-        >
-          Fudex
-        </Link>
-
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8">
-          <NavLink to="/" className={navLinkStyle}>
-            Home
-          </NavLink>
-
-          <NavLink to="/meals" className={navLinkStyle}>
-            Meals
-          </NavLink>
-
-          {user && (
-            <NavLink to="/dashboard" className={navLinkStyle}>
-              Dashboard
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center gap-10">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.name}
+              to={link.path}
+              className={({ isActive }) =>
+                `relative text-sm font-semibold tracking-wide transition-colors duration-300 hover:text-orange-500 ${
+                  isActive ? "text-orange-500" : "text-gray-600"
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  {link.name}
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-underline"
+                      className="absolute -bottom-1 left-0 w-full h-[2px] bg-orange-500"
+                    />
+                  )}
+                </>
+              )}
             </NavLink>
-          )}
+          ))}
         </div>
 
-        {/* Right Side */}
-        <div className="hidden md:flex items-center gap-4">
+        {/* Desktop Auth Section */}
+        <div className="hidden md:flex items-center gap-6">
           {!user ? (
-            <>
-              <Link
-                to="/login"
-                className="text-gray-700 font-medium hover:text-orange-500"
-              >
-                Log in
-              </Link>
-
-              <Link
-                to="/register"
-                className="px-5 py-2 rounded-full text-white font-semibold
-                bg-gradient-to-r from-orange-500 to-pink-500"
-              >
+            <div className="flex items-center gap-4">
+              <Link to="/login" className="text-sm font-bold text-gray-700 hover:text-orange-500 transition">Log in</Link>
+              <Link to="/register" className="px-6 py-2.5 rounded-full text-white font-bold bg-gradient-to-r from-orange-500 to-pink-500 hover:shadow-orange-200 shadow-lg transition-all active:scale-95">
                 Sign up
               </Link>
-            </>
+            </div>
           ) : (
-            /* Profile Dropdown */
             <div className="relative">
-              <button
+              <button 
                 onClick={() => setDropdown(!dropdown)}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 p-1 pr-3 rounded-full bg-gray-50 border hover:bg-gray-100 transition"
               >
-                <img
-                  src={user.photoURL || "https://i.ibb.co/4pDNDk1/avatar.png"}
-                  alt="user"
-                  className="w-10 h-10 rounded-full border-2 border-orange-400 object-cover"
-                />
-                <ChevronDown size={18} />
+                <img src={user.photoURL || "/avatar.png"} alt="user" className="w-9 h-9 rounded-full object-cover border-2 border-orange-400" />
+                <ChevronDown size={16} className={`transition-transform duration-300 ${dropdown ? "rotate-180" : ""}`} />
               </button>
-
-              {dropdown && (
-                <div className="absolute right-0 mt-3 w-40 bg-white rounded-xl shadow-lg border">
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full px-4 py-2 text-left text-sm hover:bg-orange-50"
+              
+              <AnimatePresence>
+                {dropdown && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-2xl border p-2 overflow-hidden"
                   >
-                    Log out
-                  </button>
-                </div>
-              )}
+                    <button onClick={handleLogout} className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50 rounded-xl transition">
+                      <LogOut size={16} /> Log out
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-gray-700"
-        >
-          {open ? <X size={28} /> : <Menu size={28} />}
+        {/* Mobile Toggle Button */}
+        <button onClick={() => setOpen(!open)} className="md:hidden p-2 rounded-xl bg-gray-100 text-gray-700 active:scale-90 transition">
+          {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      {open && (
-        <div className="md:hidden mx-4 mb-4 rounded-2xl bg-white shadow-xl p-6 space-y-4">
-          <NavLink to="/" onClick={() => setOpen(false)}>
-            Home
-          </NavLink>
+      {/* Advanced Mobile Menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden overflow-hidden bg-white border-t"
+          >
+            <div className="p-6 flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <NavLink
+                  key={link.name}
+                  to={link.path}
+                  onClick={() => setOpen(false)}
+                  className={({ isActive }) => 
+                    `flex items-center gap-4 p-4 rounded-2xl text-lg font-semibold transition-all ${
+                      isActive ? "bg-orange-500 text-white shadow-lg shadow-orange-100" : "text-gray-700 bg-gray-50"
+                    }`
+                  }
+                >
+                  {link.icon} {link.name}
+                </NavLink>
+              ))}
 
-          <NavLink to="/meals" onClick={() => setOpen(false)}>
-            Meals
-          </NavLink>
-
-          {user && (
-            <NavLink to="/dashboard" onClick={() => setOpen(false)}>
-              Dashboard
-            </NavLink>
-          )}
-
-          {!user ? (
-            <>
-              <Link to="/login">Log in</Link>
-              <Link
-                to="/register"
-                className="block text-center py-2 rounded-full text-white
-                bg-gradient-to-r from-orange-500 to-pink-500"
-              >
-                Sign up
-              </Link>
-            </>
-          ) : (
-            <button
-              onClick={handleLogout}
-              className="w-full text-left text-red-500 font-medium"
-            >
-              Log out
-            </button>
-          )}
-        </div>
-      )}
+              {!user ? (
+                <div className="grid grid-cols-2 gap-4 pt-4">
+                  <Link to="/login" onClick={() => setOpen(false)} className="flex items-center justify-center p-4 rounded-2xl border font-bold text-gray-700 bg-white">
+                    Login
+                  </Link>
+                  <Link to="/register" onClick={() => setOpen(false)} className="flex items-center justify-center p-4 rounded-2xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold">
+                    Join Now
+                  </Link>
+                </div>
+              ) : (
+                <button onClick={handleLogout} className="flex items-center gap-4 p-4 rounded-2xl text-red-500 font-bold bg-red-50 border border-red-100">
+                  <LogOut size={20} /> Log out
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
